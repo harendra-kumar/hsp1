@@ -58,7 +58,7 @@ env: &env
       # If you have not committed packcheck.sh in your repo at PACKCHECK
       # then it is automatically pulled from this URL.
       PACKCHECK_GITHUB_URL: "https://raw.githubusercontent.com/harendra-kumar/packcheck"
-      PACKCHECK_GITHUB_COMMIT: "d11a8a68fef00f4932bbedd6134950495ccd7420"
+      PACKCHECK_GITHUB_COMMIT: "8ad36c599729582120a3012bb0723d7d4fd8a31f"
 
     docker:
       - image: debian:stretch
@@ -72,24 +72,30 @@ preinstall: &preinstall
         apt-get update
         # required for https/cache save and restore
         apt-get install -y ca-certificates
+
         # For ghc and cabal-install packages from haskell.org
         # gnupg is required for apt-key to work
         apt-get install -y gnupg
         apt-key adv --keyserver keyserver.ubuntu.com  --recv-keys BA3CBA3FFE22B574
         echo "deb http://downloads.haskell.org/debian stretch main" >> /etc/apt/sources.list
         apt-get update
+
         # required for packcheck
         apt-get install -y curl
+
         # required for outbound https for stack and for stack setup
         apt-get install -y netbase xz-utils make
+
         # If a custom stack-yaml is specified, replace the default with that
         if test -e "$STACK_YAML"; then rm -f stack.yaml && ln -sv $STACK_YAML stack.yaml; else true; fi
         unset STACK_YAML
+
         # Get packcheck if needed
         CURL=$(which curl)
         PACKCHECK_URL=${PACKCHECK_GITHUB_URL}/${PACKCHECK_GITHUB_COMMIT}/packcheck.sh
         if test ! -e "$PACKCHECK"; then $CURL -sL -o "$PACKCHECK" $PACKCHECK_URL; fi;
         chmod +x $PACKCHECK
+
 restore: &restore
   # Needs to happen after installing ca-certificates
   restore_cache:
