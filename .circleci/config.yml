@@ -119,7 +119,7 @@ save: &save
 #-----------------------------------------------------------------------------
 
 jobs:
-  cabal-ghc-8.6.5:
+  cabal-ghc-8-6-5:
       <<: *env
       steps:
         - checkout
@@ -131,91 +131,12 @@ jobs:
               echo "****CABAL_REINIT_CONFIG=$CABAL_REINIT_CONFIG"
               bash -c "$PACKCHECK cabal-v2"
         - *save
-  cabal-ghc-8.4.4:
-      <<: *env
-      steps:
-        - checkout
-        - *preinstall
-        - *restore
-        - run: |
-              apt-get install -y ghc-8.4.4
-              apt-get install -y cabal-install-2.4
-              bash -c "$PACKCHECK cabal-v2"
-        - *save
-  cabal-ghc-8.2.2:
-      <<: *env
-      steps:
-        - checkout
-        - *preinstall
-        - *restore
-        - run: |
-              apt-get install -y ghc-8.2.2
-              apt-get install -y cabal-install-2.4
-              bash -c "$PACKCHECK cabal-v2"
-        - *save
-  cabal-ghc-8.0.2:
-      <<: *env
-      steps:
-        - checkout
-        - *preinstall
-        - *restore
-        - run: |
-              apt-get install -y ghc-8.0.2
-              apt-get install -y cabal-install-2.4
-              bash -c "$PACKCHECK cabal-v2"
-        - *save
-  cabal-ghc-7.10.3:
-      <<: *env
-      steps:
-        - checkout
-        - *preinstall
-        - *restore
-        - run: |
-              apt-get install -y ghc-7.10.3
-              apt-get install -y cabal-install-2.4
-              bash -c "$PACKCHECK cabal-v2"
-        - *save
-  stack-ghc-8.4:
-      <<: *env
-      steps:
-        - checkout
-        - *preinstall
-        - *restore
-        - run: |
-            bash -c "$PACKCHECK stack RESOLVER=lts-12"
-        - *save
-  stack-ghc-8.2:
-      <<: *env
-      steps:
-        - checkout
-        - *preinstall
-        - *restore
-        - run: |
-            bash -c "$PACKCHECK stack RESOLVER=lts-11"
-        - *save
-  coveralls-ghc-8.2.2:
-      <<: *env
-      steps:
-        - checkout
-        - *preinstall
-        - *restore
-        - run:
-            environment:
-              COVERALLS_OPTIONS: "--repo-token=cqLlrBTwrEm9IuaxJdzeLN76cTsZQ15kZ --coverage-mode=StrictlyFullLines --exclude-dir=test test"
-            command: |
-              apt-get install -y ghc-8.2.2
-              apt-get install -y cabal-install-2.4
-              # required by hpc-coveralls
-              apt-get install -y libcurl4-gnutls-dev
-              apt-get install -y git
-              bash -c "$PACKCHECK cabal-v1"
-        - *save
 
 workflows:
   version: 2.1
   build:
     jobs:
-      - cabal-ghc-8.6.5
+      - cabal-ghc-8-6-5
       #- cabal-ghc-8.4.4
       #- cabal-ghc-8.2.2
       #- cabal-ghc-8.0.2
