@@ -69,6 +69,7 @@ env: &env
 
 preinstall: &preinstall
   run: |
+        echo "****CABAL_REINIT_CONFIG-preinstall-begin=$CABAL_REINIT_CONFIG"
         apt-get update
         # required for https/cache save and restore
         apt-get install -y ca-certificates
@@ -87,7 +88,9 @@ preinstall: &preinstall
         apt-get install -y netbase xz-utils make
 
         # If a custom stack-yaml is specified, replace the default with that
+        echo "****CABAL_REINIT_CONFIG-preinstall-1=$CABAL_REINIT_CONFIG"
         if test -e "$STACK_YAML"; then rm -f stack.yaml && ln -sv $STACK_YAML stack.yaml; else true; fi
+        echo "****CABAL_REINIT_CONFIG-preinstall-2=$CABAL_REINIT_CONFIG"
         unset STACK_YAML
 
         # Get packcheck if needed
@@ -95,6 +98,7 @@ preinstall: &preinstall
         PACKCHECK_URL=${PACKCHECK_GITHUB_URL}/${PACKCHECK_GITHUB_COMMIT}/packcheck.sh
         if test ! -e "$PACKCHECK"; then $CURL -sL -o "$PACKCHECK" $PACKCHECK_URL; fi;
         chmod +x $PACKCHECK
+        echo "****CABAL_REINIT_CONFIG-preinstall-end=$CABAL_REINIT_CONFIG"
 
 restore: &restore
   # Needs to happen after installing ca-certificates
