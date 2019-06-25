@@ -124,6 +124,7 @@ jobs:
         - run: |
               apt-get install -y ghc-8.6.3
               apt-get install -y cabal-install-2.4
+              echo "****CABAL_REINIT_CONFIG=$CABAL_REINIT_CONFIG"
               bash -c "$PACKCHECK cabal-v2"
         - *save
   cabal-ghc-8.4.4:
